@@ -44,9 +44,9 @@ const Navbar = () => {
                             {link.name}
                         </Link>
                     ))}
-                    <Link to="/book" className="btn btn-primary text-sm px-6 py-2 ml-4">
+                    <a href="https://calendly.com/sayyam-goat7/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary text-sm px-6 py-2 ml-4">
                         Book a Call
-                    </Link>
+                    </a>
                 </div>
 
                 {/* Mobile Toggle */}
@@ -77,9 +77,9 @@ const Navbar = () => {
                                         {link.name}
                                     </Link>
                                 ))}
-                                <Link to="/book" onClick={() => setIsOpen(false)} className="btn btn-primary w-full justify-center mt-4">
+                                <a href="https://calendly.com/sayyam-goat7/30min" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)} className="btn btn-primary w-full justify-center mt-4">
                                     Book a Call
-                                </Link>
+                                </a>
                             </div>
                         </motion.div>
                     )}
