@@ -1,8 +1,22 @@
 // Vercel Serverless Function for Contact Form
 // Uses Web3Forms webhook service
 
-export default async function handler(req, res) {
-    // Only allow POST requests
+module.exports = async function handler(req, res) {
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    );
+
+    // Handle OPTIONS preflight request
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+    // Only allow POST requests for actual form submission
     if (req.method !== 'POST') {
         return res.status(405).json({ success: false, message: 'Method not allowed' });
     }
@@ -30,9 +44,16 @@ export default async function handler(req, res) {
         // Web3Forms API endpoint
         const web3FormsUrl = 'https://api.web3forms.com/submit';
 
-        // You'll need to get a free access key from https://web3forms.com
-        // For now, using a placeholder - user needs to replace this
-        const accessKey = process.env.WEB3FORMS_ACCESS_KEY || '2c59c9e7-d169-4963-9123-7e5f362eb1c4';
+        // Get access key from environment variable
+        const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
+
+        if (!accessKey) {
+            console.error('WEB3FORMS_ACCESS_KEY not set in environment variables');
+            return res.status(500).json({
+                success: false,
+                message: 'Contact form is not configured. Please contact the administrator.'
+            });
+        }
 
         // Prepare form data for Web3Forms
         const formData = {
@@ -76,4 +97,5 @@ export default async function handler(req, res) {
             message: 'An error occurred. Please try again later.'
         });
     }
-}
+};
+
