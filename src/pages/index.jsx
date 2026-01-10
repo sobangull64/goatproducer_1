@@ -209,10 +209,18 @@ export const Contact = () => {
         setStatus({ type: '', message: '' });
 
         try {
-            const response = await fetch('/api/contact', {
+            // Submit directly to Web3Forms
+            const response = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify({
+                    access_key: '2c59c9e7-d169-4963-9123-7e5f362eb1c4',
+                    name: formData.name,
+                    email: formData.email,
+                    message: formData.message,
+                    subject: 'New Message from GOAT Produces',
+                    from_name: 'GOAT Produces Contact Form'
+                })
             });
 
             const data = await response.json();
