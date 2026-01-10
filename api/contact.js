@@ -1,6 +1,8 @@
 // Vercel Serverless Function for Contact Form
 // Uses Web3Forms webhook service
 
+const axios = require('axios');
+
 module.exports = async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -65,25 +67,21 @@ module.exports = async function handler(req, res) {
             from_name: 'GOAT Produces Website',
         };
 
-        // Send to Web3Forms
-        const response = await fetch(web3FormsUrl, {
-            method: 'POST',
+        // Send to Web3Forms using axios
+        const response = await axios.post(web3FormsUrl, formData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
-            },
-            body: JSON.stringify(formData)
+            }
         });
 
-        const data = await response.json();
-
-        if (data.success) {
+        if (response.data.success) {
             return res.status(200).json({
                 success: true,
                 message: 'Message sent successfully!'
             });
         } else {
-            console.error('Web3Forms error:', data);
+            console.error('Web3Forms error:', response.data);
             return res.status(500).json({
                 success: false,
                 message: 'Failed to send message. Please try again.'
